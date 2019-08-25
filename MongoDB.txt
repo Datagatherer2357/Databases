@@ -1,0 +1,23 @@
+Applied Databases Project
+Gareth Duffy g00364693
+MongoDB component 4.3
+
+PLEASE NOTE: The database name for this file has been renamed "appdb" and the collection renamed "project" (not "docs").
+-----------------------------------------------------------------------------------------
+4.3.1 Average Engine Size:
+
+db.project.aggregate([{$group:{_id:"$reg", "Average engine size is":{$avg:"$car.engineSize"}}}])
+
+-----------------------------------------------------------------------------------------
+4.3.2 Categorise County Populations:
+
+db.project.aggregate([{$bucket:{groupBy: "$pop",boundaries: [ 0, 49999, 50000,99999, 100000,149000],default: "Other", output:{"counties" : { $push: "$name" }}}}])
+
+-----------------------------------------------------------------------------------------
+4.3.3 Redefine County Populations:
+
+db.project.aggregate([{$match:{_id:{$in:["WH","MO","LM","G","D"]}}},{
+$project:{_id: 1, name: 1, pop:{
+$cond:{if:{$gte:["$pop", 99999]}, then:"Big County", else:"Small County"}}}}])
+
+-----------------------------------------------------------------------------------------
